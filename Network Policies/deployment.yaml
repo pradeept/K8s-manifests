@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: pradeept-work
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+
+---
+#Pod to curl the nginx deployment
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curler
+  namespace: pradeept-work
+  labels:
+    app: curler
+spec:
+  containers:
+    - name: curler
+      image: nginx
+      resources:
+        limits:
+          memory: "50Mi"
+          cpu: "150m"
+      ports:
+        - containerPort: 8080

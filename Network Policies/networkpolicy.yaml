@@ -1,0 +1,29 @@
+# Network ploicy for nginx-deployment
+# Ingress: only from curler pod
+# egress: only to nginx-curler pod
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-policy
+  namespace: pradeept-work
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  policyTypes:
+    - "Ingress"
+    - "Egress"
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: curler
+      ports:
+        - port: 80
+  egress:
+    - to:
+        # - ipBlock:
+        #     cidr: 142.250.182.132/24
+        - podSelector:
+            matchLabels:
+              app: curler
